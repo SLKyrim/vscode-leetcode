@@ -55,7 +55,7 @@ public:
         }
         int rows = obstacleGrid.size();
         int cols = obstacleGrid[0].size();
-        long dp[rows][cols];
+        vector<vector<long>> dp(rows, vector<long>(cols, 0));
         dp[0][0] = 1;
         for (int i = 1; i < cols; i++) {
             if (obstacleGrid[0][i] == 1) {

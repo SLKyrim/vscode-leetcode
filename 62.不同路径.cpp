@@ -44,10 +44,13 @@
  */
 
 // @lc code=start
+#include <vector>
+using namespace std;
+
 class Solution {
 public:
     int uniquePaths(int m, int n) {
-        int dp[n][m];
+        vector<vector<int>> dp(n, vector<int>(m, 0));
         for (int i = 0; i < m; i++) {
             dp[0][i] = 1;
         }
