@@ -45,7 +45,7 @@ private:
     class Node {
     private:
         int R = 26;
-        map<int, Node> links;
+        map<int, Node*> links;
         bool isEnd;
     public:
         Node() {
@@ -56,11 +56,11 @@ private:
             return links.count(ch - 'a') != 0;
         }
 
-        void put(char ch, Node node) {
-            links.insert(pair<int, Node>(ch - 'a', node));
+        void put(char ch, Node* node) {
+            links.insert(pair<int, Node*>(ch - 'a', node));
         }
 
-        Node get(char ch) {
+        Node* get(char ch) {
             return links[ch - 'a'];
         }
 
@@ -73,27 +73,56 @@ private:
         }
     };
 
-    Node root;
+    Node* root;
 
 public:
     /** Initialize your data structure here. */
     Trie() {
-        root = Node();
+        root = new Node();
     }
     
     /** Inserts a word into the trie. */
     void insert(string word) {
-        
+        Node* node = root;
+        for (int i = 0; i < word.size(); i++) {
+            char currChar = word[i];
+            if (!(*node).containsKey(currChar)) {
+                (*node).put(currChar, new Node());
+            }
+            node = (*node).get(currChar);
+        }
+        (*node).setEnd();
     }
     
     /** Returns if the word is in the trie. */
     bool search(string word) {
-        
+        Node* node = root;
+        for (int i = 0; i < word.size(); i++) {
+            if ((*node).containsKey(word[i])) {
+                node = (*node).get(word[i]);
+            }
+            else {
+                return false;
+            }
+        }
+        if (!(*node).getEnd()) {
+            return false;
+        }
+        return true;
     }
     
     /** Returns if there is any word in the trie that starts with the given prefix. */
     bool startsWith(string prefix) {
-        
+        Node* node = root;
+        for (int i = 0; i < prefix.size(); i++) {
+            if ((*node).containsKey(prefix[i])) {
+                node = (*node).get(prefix[i]);
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
     }
 };
 
