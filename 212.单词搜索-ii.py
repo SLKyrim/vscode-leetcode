@@ -11,8 +11,7 @@
 # Dislikes: 0
 # Total Accepted:    7.8K
 # Total Submissions: 20.2K
-# Testcase Example:  '[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]\n' +
-  '["oath","pea","eat","rain"]'
+# Testcase Example:  '[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]\n' + '["oath","pea","eat","rain"]'
 #
 # 给定一个二维网格 board 和一个字典中的单词列表 words，找出所有同时在二维网格和字典中出现的单词。
 # 
