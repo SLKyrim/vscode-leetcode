@@ -53,6 +53,7 @@ class Trie {
     private final int R = 26;
     private boolean isEnd = false;
     private Trie[] nodes; 
+    private String word;
 
     public Trie() {
         nodes = new Trie[R]; 
@@ -67,38 +68,45 @@ class Trie {
             root = root.nodes[word.charAt(i) - 'a'];
         }
         root.isEnd = true;
+        root.word = word;
     }
 
-    public boolean search(String word) {
+    public void search(char[][] board, List<String> res) {
         Trie root = this;
-        for (int i = 0; i < word.length(); i++) {
-            if (root.nodes[word.charAt(i) - 'a'] == null) {
-                return false;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                helper(res, board, root, i, j);
             }
-            root = root.nodes[word.charAt(i) - 'a'];
         }
-        return root.isEnd;
     }
 
-    public boolean startsWith(String prefix) {
-        Trie root = this;
-        for (int i = 0; i < prefix.length(); i++) {
-            if (root.nodes[prefix.charAt(i) - 'a'] == null) {
-                return false;
-            }
-            root = root.nodes[prefix.charAt(i) - 'a'];
+    public void helper(List<String> res, char[][] board, Trie root, int i, int j) {
+        if (root.isEnd) {
+            root.isEnd = false;
+            res.add(root.word);
+            return;
         }
-        return true;
+        
+        if (0 <= i && i < board.length && 0 <= j && j < board[0].length) {
+            if (board[i][j] != '#' && root.nodes[board[i][j] - 'a'] != null) {
+                Trie currRoot = root.nodes[board[i][j] - 'a'];
+                char tmp = board[i][j];
+                board[i][j] = '#';
+                helper(res, board, currRoot, i + 1, j);
+                helper(res, board, currRoot, i - 1, j);
+                helper(res, board, currRoot, i, j + 1);
+                helper(res, board, currRoot, i, j - 1);
+                board[i][j] = tmp;
+            }
+
+        }
     }
 }
 
-
 class Solution {
 
-    private String currWord;
     private List<String> res;
     private Trie trie;
-    private int[][] visited;
 
     public List<String> findWords(char[][] board, String[] words) {
         res = new ArrayList<String>();
@@ -113,48 +121,9 @@ class Solution {
             trie.insert(word);
         }
 
-        int rows = board.length;
-        int cols = board[0].length;
-        visited = new int[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                currWord = "";
-                if (helper(board, rows, cols, i, j)) {
-                    res.add(currWord);
-                }
-            }
-        }
+        trie.search(board, res);
 
         return res;
-    }
-
-    private boolean helper(char[][] board, int rows, int cols, int i, int j) {
-        if (trie.search(currWord)) {
-            return true;
-        }
-
-        boolean tmp = false;
-
-        if (0 <= i && i < rows && 0 <= j && j < cols && visited[i][j] == 0) {
-            currWord += board[i][j];
-            visited[i][j] = 1;
-            if (!trie.startsWith(currWord)) {
-                return false;
-            }
-            tmp = true;
-            tmp = helper(board, rows, cols, i - 1, j) || 
-                  helper(board, rows, cols, i + 1, j) || 
-                  helper(board, rows, cols, i, j - 1) || 
-                  helper(board, rows, cols, i, j + 1);
-            if (tmp == false) {
-                currWord = currWord.substring(0, currWord.length() - 1);
-                visited[i][j] = 0;
-                return false;
-            }
-        }
-
-        return tmp;
     }
 }
 // @lc code=end
