@@ -49,28 +49,48 @@
  */
 
 // @lc code=start
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
+// import java.util.Set;
+// import java.util.HashSet;
+// import java.util.Collections;
+// import java.util.ArrayList;
+// import java.util.List;
+
+// class Solution {
+//     public int thirdMax(int[] nums) {
+//         Set<Integer> tmp = new HashSet<>();
+//         for (int num : nums) {
+//             tmp.add(num);
+//         }
+//         if (tmp.size() < 3) {
+//             return Collections.max(tmp);
+//         }
+//         List<Integer> tmp2 = new ArrayList<>();
+//         for (int num : tmp) {
+//             tmp2.add(num);
+//         }
+//         Collections.sort(tmp2);
+//         Collections.reverse(tmp2);
+//         return tmp2.get(2);
+//     }
+// }
+
+
+import java.util.PriorityQueue;
 
 class Solution {
     public int thirdMax(int[] nums) {
-        Set<Integer> tmp = new HashSet<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int num : nums) {
-            tmp.add(num);
+            pq.add(num);
         }
-        if (tmp.size() < 3) {
-            return Collections.max(tmp);
+        if (pq.size() < 3) {
+            return pq.peek();
         }
-        List<Integer> tmp2 = new ArrayList<>();
-        for (int num : tmp) {
-            tmp2.add(num);
+        int res = pq.peek();
+        for (int i = 0; i < pq.size() - 3; i++) {
+            res = pq.remove();
         }
-        Collections.sort(tmp2);
-        Collections.reverse(tmp2);
-        return tmp2.get(2);
+        return res;
     }
 }
 // @lc code=end
