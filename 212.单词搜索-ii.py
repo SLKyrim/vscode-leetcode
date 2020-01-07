@@ -45,8 +45,55 @@
 #
 
 # @lc code=start
+class Trie:
+    def __init__(self):
+        self.R = 26
+        self.isEnd = False
+        self.nodes = [None for i in range(self.R)]
+        self.word = ""
+
+    def insert(self, word):
+        root = self
+        for i in range(len(word)):
+            if root.nodes[ord(word[i]) - ord('a')] == None:
+                root.nodes[ord(word[i]) - ord('a')] = Trie()
+            root = root.nodes[ord(word[i]) - ord('a')]
+        root.isEnd = True
+        root.word = word
+
+    def search(self, board, res):
+        root = self
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                self.helper(res, board, root, i, j)
+    
+    def helper(self, res, board, root, i, j):
+        if root.isEnd:
+            root.isEnd = False
+            res.append(root.word)
+            return
+        
+        if 0 <= i < len(board) and 0 <= j < len(board[0]):
+            if board[i][j] != '#' and root.nodes[ord(board[i][j]) - ord('a')] != None:
+                currRoot = root.nodes[ord(board[i][j]) - ord('a')]
+                tmp = board[i][j]
+                board[i][j] = '#'
+                self.helper(res, board, currRoot, i + 1, j)
+                self.helper(res, board, currRoot, i - 1, j)
+                self.helper(res, board, currRoot, i, j + 1)
+                self.helper(res, board, currRoot, i, j - 1)
+                board[i][j] = tmp
+
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        res = list()
+        if len(board) == 0 or len(words) == 0:
+            return res        
+        trie = Trie()
+        for word in words:
+            trie.insert(word)
+        trie.search(board, res)
         
+        return res
 # @lc code=end
 
