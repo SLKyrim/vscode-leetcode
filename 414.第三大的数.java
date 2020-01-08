@@ -81,13 +81,19 @@ class Solution {
     public int thirdMax(int[] nums) {
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int num : nums) {
-            pq.add(num);
+            if (!pq.contains(num)) {
+                pq.add(num);
+            }
         }
         if (pq.size() < 3) {
+            while (pq.size() > 1) {
+                pq.remove();
+            }
             return pq.peek();
         }
-        int res = pq.peek();
-        for (int i = 0; i < pq.size() - 3; i++) {
+        int size = pq.size();
+        int res = pq.remove();
+        for (int i = 0; i < size - 3; i++) {
             res = pq.remove();
         }
         return res;
