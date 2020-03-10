@@ -40,13 +40,28 @@ class Node:
 """
 class Solution:
     def preorder(self, root: 'Node') -> List[int]:
+        
+        ### 迭代：从右往左将当前节点的孩子压入栈
         if not root:
             return []
         
-        res = [root.val]
-        for child in root.children:
-            res += self.preorder(child)
+        res = list()
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            for i in range(len(node.children)-1, -1, -1):
+                stack.append(node.children[i])
         return res
+        
+        ### 递归
+        # if not root:
+        #     return []
+        
+        # res = [root.val]
+        # for child in root.children:
+        #     res += self.preorder(child)
+        # return res
         
 # @lc code=end
 

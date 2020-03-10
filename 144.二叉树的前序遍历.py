@@ -41,13 +41,31 @@
 
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
+        
+        # 迭代：先压右孩子，再压左孩子
         if not root:
             return []
-        res = [root.val]
-        if root.left:
-            res += self.preorderTraversal(root.left)
-        if root.right:
-            res += self.preorderTraversal(root.right)
+
+        res = list()
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
         return res
+            
+
+        ### 递归
+        # if not root:
+        #     return []
+        # res = [root.val]
+        # if root.left:
+        #     res += self.preorderTraversal(root.left)
+        # if root.right:
+        #     res += self.preorderTraversal(root.right)
+        # return res
 # @lc code=end
 

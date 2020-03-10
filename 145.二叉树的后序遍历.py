@@ -39,15 +39,57 @@
 #         self.right = None
 
 class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
+    def postorderTraversal(self, root):
+        
+        # ### 取巧迭代：先压左孩子，再压右孩子（和前序迭代遍历相反），最后逆序输出
+        # if not root:
+        #     return []
+        # res = list()
+        # stack = [root]
+        # while stack:
+        #     node = stack.pop()
+        #     res.append(node.val)
+        #     if node.left:
+        #         stack.append(node.left)
+        #     if node.right:
+        #         stack.append(node.right)
+        # return res[::-1]
+        
+
+        ### 迭代：若未访问过当前节点的左右孩子，则先压右孩子，再压左孩子
+        # 若当前的左右孩子都访问过了，才访问当前节点并将其弹出栈
+        # 需要用一个集合保存访问过的节点
         if not root:
             return []
+
         res = list()
-        if root.left:
-            res += self.postorderTraversal(root.left)
-        if root.right:
-            res += self.postorderTraversal(root.right)
-        res += [root.val]
+        visNode = set() # 记录访问过得节点
+        stack = [root]
+        while stack:
+            node = stack[-1]
+            isVisLeft = True # 是否访问过左孩子的标记
+            isVisRight = True # 是否访问过右孩子的标记
+            if node.right and node.right not in visNode:
+                isVisRight = False
+                stack.append(node.right)
+            if node.left and node.left not in visNode:
+                isVisLeft = False
+                stack.append(node.left)
+            if isVisLeft and isVisRight:
+                res.append(node.val) # 当前节点左右孩子都访问过了才将该节点的值放进res
+                stack.pop()
+                visNode.add(node)
         return res
+
+        ### 递归
+        # if not root:
+        #     return []
+        # res = list()
+        # if root.left:
+        #     res += self.postorderTraversal(root.left)
+        # if root.right:
+        #     res += self.postorderTraversal(root.right)
+        # res += [root.val]
+        # return res
 # @lc code=end
 

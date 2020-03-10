@@ -52,20 +52,41 @@ class Node:
 """
 class Solution:
     def levelOrder(self, root: 'Node') -> List[List[int]]:
+        # 迭代：同二叉树，用先进先出对列保存节点，记录每层节点数，每个循环更新该数
         if not root:
             return []
 
         res = list()
+        queue = [root]
+        level = len(queue)
 
-        def dfs(node, level):
-            if len(res) == level:
-                res.append([])
-            res[level].append(node.val)
-            for child in node.children:
-                dfs(child, level + 1)
+        while queue:
+            tmp = list()
+            for i in range(level):
+                node = queue.pop(0)
+                tmp.append(node.val)
+                for child in node.children:
+                    queue.append(child)
+            res.append(tmp)
+            level = len(queue)
+        return res
 
-        dfs(root, 0)
-        return res    
+
+        ### 递归
+        # if not root:
+        #     return []
+
+        # res = list()
+
+        # def dfs(node, level):
+        #     if len(res) == level:
+        #         res.append([])
+        #     res[level].append(node.val)
+        #     for child in node.children:
+        #         dfs(child, level + 1)
+
+        # dfs(root, 0)
+        # return res    
         
 # @lc code=end
 

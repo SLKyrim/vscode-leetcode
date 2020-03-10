@@ -40,14 +40,32 @@
 
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
+        
+        ### 迭代 先全压左孩子，再压这些左孩子的右孩子
         if not root:
             return []
+        
         res = list()
-        if root.left:
-            res += self.inorderTraversal(root.left)
-        res += [root.val]
-        if root.right:
-            res += self.inorderTraversal(root.right)
+        stack = list()
+        curr = root
+        while stack or curr:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            curr = stack.pop()
+            res.append(curr.val)
+            curr = curr.right
         return res
+
+        ### 递归
+        # if not root:
+        #     return []
+        # res = list()
+        # if root.left:
+        #     res += self.inorderTraversal(root.left)
+        # res += [root.val]
+        # if root.right:
+        #     res += self.inorderTraversal(root.right)
+        # return res
 # @lc code=end
 

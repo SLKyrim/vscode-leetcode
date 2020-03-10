@@ -46,21 +46,44 @@
 
 class Solution:
     def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        
+        # 迭代：用先进先出队列保存节点，记录每层节点数，每个循环更新该数
         if not root:
             return []
-        res = list()
 
-        def dfs(node, level):
-            if len(res) == level:
-                res.append([])
-            res[level].append(node.val)
-            if node.left:
-                dfs(node.left, level + 1)
-            if node.right:
-                dfs(node.right, level + 1)
-        
-        dfs(root, 0)
+        res = list()
+        queue = [root]
+        level = len(queue) # 记录当前层的节点数
+
+        while queue:
+            tmp = list() # 记录每层的res
+            for i in range(level):
+                node = queue.pop(0)
+                tmp.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(tmp)
+            level = len(queue)
         return res
+
+        ### 递归
+        # if not root:
+        #     return []
+        # res = list()
+
+        # def dfs(node, level):
+        #     if len(res) == level:
+        #         res.append([])
+        #     res[level].append(node.val)
+        #     if node.left:
+        #         dfs(node.left, level + 1)
+        #     if node.right:
+        #         dfs(node.right, level + 1)
+        
+        # dfs(root, 0)
+        # return res
 
 # @lc code=end
 

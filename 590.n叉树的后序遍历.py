@@ -40,13 +40,48 @@ class Node:
 """
 class Solution:
     def postorder(self, root: 'Node') -> List[int]:
+
+        # 取巧迭代：(逆前序再逆序即后序)从左向右将当前节点压入栈，最后输出结果逆序
         if not root:
             return []
         res = list()
-        for child in root.children:
-            res += self.postorder(child)
-        res += [root.val]
-        return res
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            for child in node.children:
+                stack.append(child)
+        return res[::-1]
+
+        # 迭代：超时
+        # if not root:
+        #     return []
+        # res = list()
+        # visNode = set()
+        # stack = [root]
+        # while stack:
+        #     node = stack[-1]
+        #     childNum = len(node.children)
+        #     visited = [True for i in range(childNum)]
+        #     for i in range(childNum - 1, -1, -1):
+        #         child = node.children[i]
+        #         if child not in visNode:
+        #             visited[i] = False
+        #             stack.append(child)
+        #     if len(set(visited)) == 1:
+        #         stack.pop()
+        #         res.append(node.val)
+        #         visNode.add(node)
+        # return res
+
+        ### 递归
+        # if not root:
+        #     return []
+        # res = list()
+        # for child in root.children:
+        #     res += self.postorder(child)
+        # res += [root.val]
+        # return res
         
 # @lc code=end
 
