@@ -52,5 +52,23 @@
 
 class Solution:
     def maxPathSum(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        self.res = float('-inf')
+
+        def dfs(node):
+            """
+            返回包含node在内的路径最大和
+            """
+            if not node:
+                return 0
+            left = max(dfs(node.left), 0)
+            right = max(dfs(node.right), 0)
+            cur = node.val + left + right # 由cur连通左右子树的路径和
+            self.res = max(self.res, cur)
+            return node.val + max(left, right) # 递归时，左右路径只能选一条
+        
+        dfs(root)
+        return self.res
 # @lc code=end
 
