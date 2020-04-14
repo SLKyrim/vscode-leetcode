@@ -38,14 +38,29 @@
 # @lc code=start
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        # dp[i] 在前i个房子偷到的最大金额
-        # 状态转移方程：dp[i] = max(dp[i-2]+nums[i], dp[i-1])
+        # 基于下面动态规划的思路
+        # 从状态转移方程可以看出，当前状态只与前两个状态有关，因此可以用pre, cur两个变量来表示前两个状态，降低空间复杂度
+        if not nums:
+            return 0
+        if len(nums) <= 2:
+            return max(nums)
         n = len(nums)
-        dp = [0] * n
-        dp[0] = nums[0]
-        dp[1] = max(nums[0], nums[1])
+        pre = nums[0]
+        cur = max(nums[0], nums[1])
         for i in range(2, n):
-            dp[i] = max(dp[i-2]+nums[i], dp[i-1])
-        return dp[-1]
+            tmp = cur
+            cur = max(pre + nums[i], cur)
+            pre = tmp
+        return cur
+
+        # # dp[i] 在前i个房子偷到的最大金额
+        # # 状态转移方程：dp[i] = max(dp[i-2]+nums[i], dp[i-1])
+        # n = len(nums)
+        # dp = [0] * n
+        # dp[0] = nums[0]
+        # dp[1] = max(nums[0], nums[1])
+        # for i in range(2, n):
+        #     dp[i] = max(dp[i-2]+nums[i], dp[i-1])
+        # return dp[-1]
 # @lc code=end
 
