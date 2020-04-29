@@ -51,51 +51,40 @@ class Solution:
         # 排序算法图解：
         # https://www.sohu.com/a/258291348_291099
         
-        # 堆排序 (6.03%)
+        # 堆排序 (27.2%)
         # 堆排序是一种选择排序，就是不断地建最大堆（根节点值不小于其孩子节点值），然后将堆顶（即最大值）换到序列末尾，然后继续建堆，换到末尾（换出去的就不算进下一次堆里了），循环
-        def buildHeap(arr, n, i):
+        def sift_down(arr, root, k):
             """
-            做最大堆
-            arr: 表示当前堆的数组
-            n: 堆内元素个数
-            i: 堆顶位置 
+            将arr[:k]做成大顶堆
+            arr: 表示堆的列表
+            root: 堆顶根节点在列表arr内的索引位置
+            k: 堆的大小
             """
-            top = i
-            l = 2 * i + 1 # 堆顶左子树根节点位置
-            r = 2 * i + 2 # 堆顶右子树根节点位置
+            root_val = arr[root]
+            while 2 * root + 1 < k:
+                left = 2 * root + 1 # root左孩子在arr中的索引位置
+                right = 2 * root + 2 # root右孩子在arr中的索引位置
+                child = left
+                if right < k and arr[left] < arr[right]:
+                    child = right # 若右孩子在堆内且比左孩子大
+                if root_val < arr[child]:
+                    arr[root] = arr[child]
+                    root = child
+                else:
+                    break
+            arr[root] = root_val
 
-            # 遗留问题：这里的n为什么不能用len(arr)代替从而减少传递参数的数量
-            # 左子树根大于堆顶，换到堆顶
-            if l < n and arr[i] < arr[l]:
-                top = l
-            
-            # 右子树根大于堆顶，换到堆顶
-            if r < n and arr[top] < arr[r]:
-                top = r
-            
-            # 若堆顶已替换，则继续递归；否则最大堆已做成，结束递归
-            if top != i:
-                arr[top], arr[i] = arr[i], arr[top]
-                buildHeap(arr, n, top)
+        k = len(nums)
+        # 从倒数第二层最右边的节点开始下沉做大顶堆
+        # 由堆是完全二叉树的性质得：倒数第二层最右边的节点在列表内索引为(k-1)//2
+        for i in range((k - 1) // 2, -1, -1):
+            sift_down(nums, i, k)
+        # 堆排序，每次下沉堆规模减1，依次把堆顶最大值放到尾部
+        for i in range(k - 1, 0, -1):
+            nums[i], nums[0] = nums[0], nums[i]
+            sift_down(nums, 0, i)
+        return nums
 
-        def heapSort(arr):
-            """
-            对arr进行堆排序
-            """
-            n = len(arr)
-
-            # 从堆底把子堆做成最大堆，逐步把整个数组做成最大堆
-            for i in range(n - 1, -1, -1):
-                buildHeap(arr, n, i)
-
-            # 每次做完重新做完最大堆后，arr[0]即堆顶最大值，arr[i]即堆底，arr[i]之后的都是弹出堆排序好的序列
-            for i in range(n - 1, 0, -1):
-                arr[i], arr[0] = arr[0], arr[i] # 堆底和堆顶交换
-                buildHeap(arr, i, 0) # 弹出堆底后重新做最大堆
-            
-            return arr
-
-        return heapSort(nums)
 
         
         # # 计数排序 (87.18%)
