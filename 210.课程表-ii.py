@@ -55,38 +55,72 @@
 #
 
 # @lc code=start
-import collections
+# import collections
 class Solution:
     def findOrder(self, numCourses, prerequisites):
-        graph = collections.defaultdict(list) # 用哈希表记录每门课的先导课程，实际是个有向图结构
-        for pre in prerequisites:
-            graph[pre[0]].append(pre[1])
-        state = [0] * numCourses # 记录课程状态，0未访问，1访问中，2访问完毕
-        self.res = []
-        self.isCircle = False # 记录图中是否有环
-
-        def dfs(ind: int):
-            """访问课程ind"""
-            state[ind] = 1
-
-            for pre in graph[ind]:
-                if state[pre] == 1:
-                    self.isCircle = True
-                    return
-                # 难点1：如何递归：对未访问的节点递归，且在递归完后检查是否有环
-                if state[pre] == 0:
-                    dfs(pre)
-                    if self.isCircle:
-                        return
-
-            state[ind] = 2
-            self.res.append(ind)
-        # 难点2：如何开始DFS：对未访问的节点进行DFS，且DFS前检查是否有环
-        for i in range(numCourses):
-            if not self.isCircle and not state[i]:
-                dfs(i)
-        if self.isCircle:
+        # BFS
+        if len(prerequisites) == 0:
+            return [i for i in range(numCourses)]
+        inDegree = [0 for i in range(numCourses)] # 入度数组
+        adj = [set() for _ in range(numCourses)] # 记录每门课的后导课程的邻接表（同DFS中的graph也可以用哈希表实现）
+        # 先初始化邻接表和入度数组
+        for second, first in prerequisites:
+            adj[first].add(second)
+            inDegree[second] += 1
+        queue = [] # 记录入度为0的节点
+        res = []
+        # 将入度为0的节点，即没有先导课程的课程入列
+        for i, degree in enumerate(inDegree):
+            if degree == 0:
+                queue.append(i)
+        # BFS
+        while queue:
+            top = queue.pop(0)
+            res.append(top)
+            # 以当前课程top为先导课程的课程入度减1
+            for course in adj[top]:
+                inDegree[course] -= 1
+                # 入度减为0时入列
+                if inDegree[course] == 0:
+                    queue.append(course)
+        # 入度为0的课程数不等于课程总数，说明有环
+        if len(res) != numCourses:
             return []
-        return self.res
+        return res
+        
+        # DFS
+        # if len(prerequisites) == 0:
+        #     return [i for i in range(numCourses)]
+        # graph = collections.defaultdict(list) # 用哈希表记录每门课的先导课程，实际是个有向图结构
+        # for pre in prerequisites:
+        #     graph[pre[0]].append(pre[1])
+        # state = [0] * numCourses # 记录课程状态，0未访问，1访问中，2访问完毕
+        # self.res = []
+        # self.isCircle = False # 记录图中是否有环
+
+        # def dfs(ind: int):
+        #     """访问课程ind"""
+        #     state[ind] = 1
+
+        #     for pre in graph[ind]:
+        #         if state[pre] == 1:
+        #             self.isCircle = True
+        #             return
+        #         # 难点1：如何递归：对未访问的节点递归，且在递归完后检查是否有环
+        #         if state[pre] == 0:
+        #             dfs(pre)
+        #             if self.isCircle:
+        #                 return
+
+        #     state[ind] = 2
+        #     self.res.append(ind)
+        # # 难点2：如何开始DFS：对未访问的节点进行DFS，且DFS前检查是否有环
+        # for i in range(numCourses):
+        #     if not self.isCircle and not state[i]:
+        #         dfs(i)
+        # if self.isCircle:
+        #     return []
+        # return self.res
+
 # @lc code=end
 
