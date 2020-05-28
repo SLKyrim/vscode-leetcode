@@ -42,6 +42,7 @@ class Solution:
                 if i - coin >= 0:
                     dp[i] = min(dp[i - coin] + 1, dp[i])
         if dp[-1] == amount + 1:
+            # dp初始化为amount + 1的好处，容易返回-1 
             return -1
         return dp[-1]
         

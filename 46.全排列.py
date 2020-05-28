@@ -33,19 +33,43 @@
 # @lc code=start
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        # 回溯
-        self.res = []
-
-        def dfs(cur, tmp):
-            if not cur:
-                self.res.append(tmp)
-                return 
+        
+        # 状态回溯DFS
+        def dfs(depth, path):
+            if depth == len(nums):
+                self.res.append(path[:]) # 这里需要对path进行拷贝，否则会跟着顶层path的改变而改变，最后回溯到根节点时path为[]
+                return
             
-            for i in range(len(cur)):
-                dfs(cur[:i] + cur[i+1:], tmp + [cur[i]])
+            for i in range(len(nums)):
+                if not self.used[i]:
+                    self.used[i] = True # 标记节点为已使用，之后的DFS就不能再使用它了
+                    path.append(nums[i])
 
-        dfs(nums, [])
-
+                    dfs(depth+1, path)
+                    # 状态回溯
+                    self.used[i] = False
+                    path.pop()
+        
+        self.res = []
+        self.used = [False for _ in range(len(nums))] # 记录节点使用状态
+        dfs(0, [])
         return self.res
+
+        
+        # 拼接数组DFS
+        # self.res = []
+
+        # def dfs(cur, tmp):
+        #     if not cur:
+        #         self.res.append(tmp)
+        #         return 
+            
+        #     for i in range(len(cur)):
+        #         dfs(cur[:i] + cur[i+1:], tmp + [cur[i]])
+
+        # dfs(nums, [])
+
+        # return self.res
+
 # @lc code=end
 
