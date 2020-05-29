@@ -45,27 +45,52 @@
 #
 
 # @lc code=start
+# BFS
+# class Solution:
+#     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+#         row = len(grid)
+#         col = len(grid[0])
+#         res = 0
+#         direction = [(1,0),(-1,0),(0,1),(0,-1)]
+#         for i in range(row):
+#             for j in range(col):
+#                 stack = [(i, j)]
+#                 cnt = 0
+#                 while stack:
+#                     xi, yj = stack.pop()
+#                     if xi < 0 or yj < 0 or xi == row or yj == col or grid[xi][yj] == 0:
+#                         continue
+#                     cnt += 1
+#                     grid[xi][yj] = 0 # 关键：访问过的位置置0，保证每个位置只访问一次
+#                     for bfs in direction:
+#                         nexti = xi + dfs[0]
+#                         nextj = yj + dfs[1]
+#                         stack.append((nexti, nextj))
+#                 res = max(res, cnt)
+#         return res
+
+# DFS
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        row = len(grid)
-        col = len(grid[0])
+
+        def dfs(r, c, cnt):
+            grid[r][c] = 0
+            directions = [(r-1,c),(r+1,c),(r,c-1),(r,c+1)]
+            for x, y in directions:
+                if 0 <= x < len(grid) and 0 <= y < len(grid[0]) and grid[x][y] == 1:
+                    cnt = dfs(x, y, cnt + 1)
+            return cnt
+
+        nr = len(grid)
+        if nr == 0:
+            return 0
+        nc = len(grid[0])
+
         res = 0
-        direction = [(1,0),(-1,0),(0,1),(0,-1)]
-        for i in range(row):
-            for j in range(col):
-                stack = [(i, j)]
-                cnt = 0
-                while stack:
-                    xi, yj = stack.pop()
-                    if xi < 0 or yj < 0 or xi == row or yj == col or grid[xi][yj] == 0:
-                        continue
-                    cnt += 1
-                    grid[xi][yj] = 0 # 关键：访问过的位置置0，保证每个位置只访问一次
-                    for dfs in direction:
-                        nexti = xi + dfs[0]
-                        nextj = yj + dfs[1]
-                        stack.append((nexti, nextj))
-                res = max(res, cnt)
+        for i in range(nr):
+            for j in range(nc):
+                if grid[i][j] == 1:
+                    res = max(res, dfs(i, j, 1))
         return res
 
 # @lc code=end
