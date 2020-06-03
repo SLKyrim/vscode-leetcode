@@ -44,10 +44,28 @@
 # @lc code=start
 class Solution:
     def sortedSquares(self, A: List[int]) -> List[int]:
-        res = list()
-        for num in A:
-            res.append(num**2)
-        res = sorted(res)
+        right = 0 # 对正数的指针
+        n = len(A)
+        while right < n and A[right] < 0:
+            right += 1
+        left = right - 1 # 对负数的指针
+        res = []
+        while left >= 0 and right < n:
+            n1, n2 = A[left]*A[left], A[right]*A[right]
+            if n1 < n2:
+                res.append(n1)
+                left -= 1
+            else:
+                res.append(n2)
+                right += 1
+        
+        while left >= 0:
+            res.append(A[left]*A[left])
+            left -= 1
+        while right < n:
+            res.append(A[right]*A[right])
+            right += 1
+        
         return res
         
 # @lc code=end
