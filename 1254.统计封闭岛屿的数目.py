@@ -70,7 +70,7 @@ class Solution:
 
         def dfs(r, c):
             grid[r][c] = 1
-            isOut = False
+            isOut = False # 陆地是否到达边界，与边界相连不算封闭陆地
             directions = [(r-1,c),(r+1,c),(r,c-1),(r,c+1)]
             for x, y in directions:
                 if 1 <= x < nr-1 and 1 <= y < nc-1 and grid[x][y] == 0:
