@@ -62,17 +62,35 @@
 # @lc code=start
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
-        dp = [0] * (amount + 1) # dp[i]表示凑金额i的组合数
-        dp[0] = 1
-        # # 这里求的是排列数，题目求的是组合数，注意区分
-        # for i in range(amount + 1):
-        #     for coin in coins:
-        #         if i - coin >= 0:
-        #             dp[i] += dp[i - coin]
-        for coin in coins:
-            for i in range(coin, amount + 1):
-                dp[i] += dp[i - coin]
-        return dp[amount]
+        # 完全背包DP
+        n = len(coins)
+        # dp[i][j]表示前i种硬币凑成总金额j的组合数
+        dp = [[0] * (amount+1) for _ in range(n+1)]
+        # 初始化
+        for i in range(n+1):
+            dp[i][0] = 1
+        for i in range(1, n+1):
+            for j in range(1, amount+1):
+                dp[i][j] = dp[i-1][j]
+                if j - coins[i-1] >= 0:
+                    # 如果是01背包，那么
+                    # dp[i][j] = dp[i-1][j] + dp[i-1][j-coins[i-1]]
+                    dp[i][j] = dp[i-1][j] + dp[i][j-coins[i-1]]
+        return dp[n][amount]
+        
+        
+        # 空间优化DP
+        # dp = [0] * (amount + 1) # dp[i]表示凑金额i的组合数
+        # dp[0] = 1
+        # # # 这里求的是排列数，题目求的是组合数，注意区分
+        # # for i in range(amount + 1):
+        # #     for coin in coins:
+        # #         if i - coin >= 0:
+        # #             dp[i] += dp[i - coin]
+        # for coin in coins:
+        #     for i in range(coin, amount + 1):
+        #         dp[i] += dp[i - coin]
+        # return dp[amount]
 
         
 # @lc code=end
