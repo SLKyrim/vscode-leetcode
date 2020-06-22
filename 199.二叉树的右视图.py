@@ -40,18 +40,39 @@
 
 class Solution:
     def rightSideView(self, root: TreeNode) -> List[int]:
-        self.res = []
+        # 层序遍历，取每层最右边的
+        if not root:
+            return []
+        queue = [root]
+        curL = len(queue)
+        res = []
+        while queue:
+            for i in range(curL):
+                node = queue.pop(0)
+                if i == curL - 1:
+                    res.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            curL = len(queue)
+        return res
 
-        def dfs(node, depth):
-            if not node:
-                return
-            if depth == len(self.res):
-                # 当前深度的最右节点
-                self.res.append(node.val)
-            dfs(node.right, depth + 1) # 先DFS右边
-            dfs(node.left, depth + 1)
 
-        dfs(root, 0)
-        return self.res
+        # DFS list trick
+        # self.res = []
+
+        # def dfs(node, depth):
+        #     if not node:
+        #         return
+        #     if depth == len(self.res):
+        #         # 当前深度的最右节点
+        #         self.res.append(node.val)
+        #     dfs(node.right, depth + 1) # 先DFS右边
+        #     dfs(node.left, depth + 1)
+
+        # dfs(root, 0)
+        # return self.res
+
 # @lc code=end
 
