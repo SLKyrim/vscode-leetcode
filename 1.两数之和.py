@@ -31,16 +31,28 @@
 class Solution:
     def twoSum(self, nums, target: int):
         res = []
-        ind = len(nums) - 1
-        while nums:
-            cur = nums.pop()
-            try:
-                res.append(nums.index(target-cur))
-                res.append(ind)
+        tmp = dict()
+        for i in range(len(nums)):
+            rst = target - nums[i]
+            if rst in tmp: # O(1)
+                res.append(tmp[rst])
+                res.append(i)
                 break
-            except:
-                ind -= 1
+            tmp[nums[i]] = i
         return res
+
+        # # index()的时间复杂度貌似是O(1)
+        # res = []
+        # ind = len(nums) - 1
+        # while nums:
+        #     cur = nums.pop()
+        #     try:
+        #         res.append(nums.index(target-cur))
+        #         res.append(ind)
+        #         break
+        #     except:
+        #         ind -= 1
+        # return res
         
 # @lc code=end
 
