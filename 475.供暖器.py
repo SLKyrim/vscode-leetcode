@@ -1,3 +1,4 @@
+
 #
 # @lc app=leetcode.cn id=475 lang=python3
 #
@@ -49,6 +50,30 @@
 # @lc code=start
 class Solution:
     def findRadius(self, houses: List[int], heaters: List[int]) -> int:
-        
+        res = 0
+        heaters.sort()
+        for house in houses:
+            left, right = 0, len(heaters) - 1
+            while left < right:
+                mid = (left + right) // 2
+                if heaters[mid] < house:
+                    left = mid + 1
+                else:
+                    right = mid
+            # 得出的 left 所指的加热器并不一定是离房屋 house 最近的一个，需要判断以下情况
+            if heaters[left] == house:
+                # 若找到的值等于 house ，则说明 house 房屋处放有一个加热器，house 房屋到加热器的最短距离为 0
+                continue
+            elif heaters[left] < house:
+                # 若该加热器的坐标值小于 house ，说明该加热器的坐标与 house 之间没有别的加热器
+                res = max(res, house - heaters[left])
+            elif left == 0:
+                # 若left == 0 即二分查找的结果指向第一个加热器的坐标,说明 heaters[left] 坐标的房屋之前的位置未放置加热器,直接相减就是到房屋 house 最近加热器的距离
+                res = max(res, heaters[left] - house)
+            else:
+                # 若left不等于 0 ，说明 house 介于left和left-1之间，房屋到加热器的最短距离就是left和left - 1处加热器与 house 差值的最小值.
+                res = max(res, min(heaters[left] - house, house - heaters[left-1]))
+        return res
+ 
 # @lc code=end
 
