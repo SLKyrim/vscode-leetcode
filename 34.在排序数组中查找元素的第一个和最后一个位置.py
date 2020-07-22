@@ -37,33 +37,33 @@ class Solution:
 
         def leftBound():
             left = 0
-            right = len(nums)
-            while left < right:
+            right = len(nums) - 1
+            while left <= right:
                 mid = left + (right - left) // 2
                 if nums[mid] == target:
-                    right = mid
+                    right = mid - 1
                 elif nums[mid] > target:
-                    right = mid
+                    right = mid - 1
                 elif nums[mid] < target:
                     left = mid + 1
-            if left == len(nums) or nums[left] != target:
+            if left >= len(nums) or nums[left] != target:
                 return -1
             return left
 
         def rightBound():
             left = 0
-            right = len(nums)
-            while left < right:
+            right = len(nums) - 1
+            while left <= right:
                 mid = left + (right - left) // 2
                 if nums[mid] == target:
                     left = mid + 1
                 elif nums[mid] > target:
-                    right = mid
+                    right = mid - 1
                 elif nums[mid] < target:
                     left = mid + 1
-            if left == 0 or nums[left - 1] != target:
+            if right < 0 or nums[right] != target:
                 return -1
-            return left - 1
+            return right
 
         left = leftBound()
         right = rightBound()
