@@ -44,18 +44,13 @@
 # @lc code=start
 class Solution:
     def isSubsequence(self, s: str, t: str) -> bool:
-        if s and not t:
-            return False
-        for ch in s:
-            if len(t) == 0:
-                return False
-            for i in range(len(t)):
-                if t[i] == ch:
-                    t = t[i+1:]
-                    break
-                if i == len(t) - 1:
-                    return False
-        return True
+        n, m = len(s), len(t)
+        i, j = 0, 0
+        while i < n and j < m:
+            if s[i] == t[j]:
+                i += 1
+            j += 1
+        return i == n
         
 # @lc code=end
 
