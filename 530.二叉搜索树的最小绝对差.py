@@ -56,23 +56,41 @@
 
 class Solution:
     def getMinimumDifference(self, root: TreeNode) -> int:
-        if not root:
-            return float("inf")
-        if not root.left and not root.right:
-            return float("inf")
-        left, right = float("inf"), float("inf")
-        if root.left:
-            node = root.left
-            while node.right:
-                node = node.right
-            left = root.val - node.val
-        if root.right:
-            node = root.right
-            while node.left:
-                node = node.left
-            right = node.val - root.val
-        res = min(left, right)
-        return min(res, self.getMinimumDifference(root.left), self.getMinimumDifference(root.right))
+        self.res = float("inf")
+        self.pre = -1
+
+        def dfs(node):
+            if not node:
+                return
+            dfs(node.left)
+            if self.pre == -1:
+                self.pre = node.val
+            else:
+                self.res = min(self.res, node.val - self.pre)
+                self.pre = node.val
+            dfs(node.right)
+        
+        dfs(root)
+        return self.res
+
+
+        # if not root:
+        #     return float("inf")
+        # if not root.left and not root.right:
+        #     return float("inf")
+        # left, right = float("inf"), float("inf")
+        # if root.left:
+        #     node = root.left
+        #     while node.right:
+        #         node = node.right
+        #     left = root.val - node.val
+        # if root.right:
+        #     node = root.right
+        #     while node.left:
+        #         node = node.left
+        #     right = node.val - root.val
+        # res = min(left, right)
+        # return min(res, self.getMinimumDifference(root.left), self.getMinimumDifference(root.right))
         
 # @lc code=end
 

@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "vector": "cpp"
-    }
+    },
+    "python.pythonPath": "D:\\Softwares\\Anaconda3\\python.exe"
 }
