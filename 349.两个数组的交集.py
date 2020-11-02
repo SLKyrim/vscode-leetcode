@@ -38,11 +38,15 @@
 # @lc code=start
 class Solution:
     def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        res = set()
-        for num in nums1:
-            if num in nums2:
-                res.add(num)
-        return list(res)
+        # res = set()
+        # for num in nums1:
+        #     if num in nums2:
+        #         res.add(num)
+        # return list(res)
+
+        nums1 = set(nums1)
+        nums2 = set(nums2)
+        return list(nums1 & nums2)
         
 # @lc code=end
 
